@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sage — Your Voice-First Second Brain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.cdnfonts.com/css/bagnard-sans" rel="stylesheet">
+<style>
+:root {
+  --bg: #1E1D1A;
+  --bg-raised: #262523;
+  --surface: rgba(214,214,214,0.04);
+  --border: rgba(214,214,214,0.08);
+  --border-active: rgba(148,168,126,0.35);
+  --text: #D6D6D6;
+  --text-dim: rgba(214,214,214,0.55);
+  --text-ghost: rgba(214,214,214,0.25);
+  --sage: #94A87E;
+  --sage-soft: rgba(148,168,126,0.10);
+  --sage-glow: rgba(148,168,126,0.25);
+  --dusk: #9B8A7A;
+  --dusk-soft: rgba(155,138,122,0.10);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--sage-soft); color: var(--sage); }
+
+.grain {
+  position: fixed; inset:0; z-index:0;
+  pointer-events: none; opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+canvas#cosmos { position: fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  height: 68px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(30,29,26,0.4);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s;
+}
+nav.scrolled { background: rgba(30,29,26,0.92); border-bottom-color: var(--border); }
+
+.nav-logo {
+  font-family: 'Bagnard Sans', serif;
+  font-weight: 400; font-size: 26px;
+  letter-spacing: 2px; text-transform: lowercase;
+}
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-link {
+  font-size: 13px; font-weight: 400; color: var(--text-dim);
+  text-decoration: none; transition: color 0.3s;
+}
+.nav-link:hover { color: var(--text); }
+
+.btn-pill {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px; font-weight: 500;
+  padding: 9px 22px; border-radius: 100px;
+  border: none; background: var(--sage); color: var(--bg);
+  cursor: pointer; text-decoration: none;
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+.btn-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(148,168,126,0.25);
+  background: #a2b68e;
+}
+
+/* ── Sections ── */
+.section {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 100px 0;
+}
+.container { width:100%; max-width:1160px; margin:0 auto; padding:0 40px; }
+
+.divider {
+  position: relative; z-index:1;
+  height: 1px; max-width: 1160px;
+  margin: 0 auto;
+  background: var(--border);
+}
+
+/* ── Hero ── */
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.hero-left {
+  opacity:0; transform:translateY(24px);
+  animation: rUp 1s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px 5px 8px; border-radius: 100px;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 12px; font-weight: 400; color: var(--text-dim);
+  margin-bottom: 32px;
+}
+.tag-dot {
+  width:6px; height:6px; border-radius:50%;
+  background: var(--sage); box-shadow: 0 0 6px var(--sage-glow);
+  animation: blink 2.5s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-left h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300; font-size: clamp(40px,5.5vw,72px);
+  line-height: 1.05; letter-spacing: -1px; margin-bottom: 24px;
+}
+.hero-left h1 i { color: var(--dusk); font-weight: 300; }
+
+.hero-left p {
+  font-size: 17px; font-weight: 200; color: var(--text-dim);
+  line-height: 1.75; max-width: 420px; margin-bottom: 36px;
+}
+.hero-left .btn-pill { font-size: 14px; padding: 12px 32px; }
+
+/* ── Phone ── */
+.phone-wrap {
+  display: flex; justify-content: center; align-items: center;
+  opacity:0; transform:translateY(30px);
+  animation: rUp 1s 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.iphone {
+  width: 280px; height: 580px; border-radius: 44px;
+  border: 3px solid rgba(214,214,214,0.15);
+  background: #111110; position: relative; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(214,214,214,0.04),
+    0 40px 80px rgba(0,0,0,0.5), 0 16px 32px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(214,214,214,0.05);
+}
+.iphone-notch {
+  position: absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:32px; background:#080808;
+  border-radius: 0 0 20px 20px; z-index:10;
+}
+.iphone-notch::after {
+  content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  width:10px; height:10px; border-radius:50%;
+  background:#161514; border:1px solid rgba(214,214,214,0.06);
+}
+.iphone-screen {
+  position:absolute; inset:12px; border-radius:34px;
+  overflow:hidden; background:#131210;
+}
+.screen-slide {
+  position:absolute; inset:0; padding:48px 20px 20px;
+  opacity:0; transform:scale(0.96);
+  transition: opacity 0.6s, transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  display:flex; flex-direction:column;
+}
+.screen-slide.active { opacity:1; transform:scale(1); }
+
+.mock-header {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:400; margin-bottom:20px;
+  letter-spacing:1px; color:var(--text);
+}
+.mock-bar {
+  height:36px; border-radius:10px; background:var(--surface);
+  border:1px solid var(--border); margin-bottom:16px;
+  display:flex; align-items:center; padding:0 12px; gap:8px;
+}
+.mock-bar-icon { width:14px; height:14px; border-radius:50%; background:rgba(148,168,126,0.25); }
+.mock-bar-text { flex:1; height:8px; border-radius:4px; background:rgba(214,214,214,0.08); }
+
+.mock-card {
+  border-radius:14px; border:1px solid var(--border);
+  background:rgba(214,214,214,0.03); padding:14px; margin-bottom:10px;
+}
+.mock-line { height:6px; border-radius:3px; background:rgba(214,214,214,0.1); margin-bottom:8px; }
+.mock-line.short { width:60%; }
+.mock-line.med { width:80%; }
+.mock-line:last-child { margin-bottom:0; }
+.mock-tag { display:inline-block; padding:3px 10px; border-radius:6px; background:var(--sage-soft); margin-top:8px; height:18px; width:50px; }
+
+.mock-mic-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
+.mock-mic {
+  width:72px; height:72px; border-radius:50%;
+  border:2px solid var(--sage);
+  display:flex; align-items:center; justify-content:center;
+  animation: micP 2s infinite;
+}
+@keyframes micP {
+  0%,100%{ box-shadow:0 0 0 0 rgba(148,168,126,0.25); }
+  50%{ box-shadow:0 0 0 16px rgba(148,168,126,0); }
+}
+.mock-mic svg { stroke:var(--sage); width:28px; height:28px; }
+
+.mock-wave { display:flex; gap:3px; align-items:center; height:24px; }
+.mock-wave span { width:3px; border-radius:2px; background:var(--sage); animation:wave 1.2s ease-in-out infinite; }
+@keyframes wave { 0%,100%{height:6px;opacity:0.4} 50%{height:20px;opacity:0.9} }
+.mock-wave span:nth-child(1){animation-delay:0s}
+.mock-wave span:nth-child(2){animation-delay:.1s}
+.mock-wave span:nth-child(3){animation-delay:.2s}
+.mock-wave span:nth-child(4){animation-delay:.3s}
+.mock-wave span:nth-child(5){animation-delay:.4s}
+.mock-wave span:nth-child(6){animation-delay:.5s}
+.mock-wave span:nth-child(7){animation-delay:.4s}
+.mock-wave span:nth-child(8){animation-delay:.3s}
+.mock-wave span:nth-child(9){animation-delay:.2s}
+.mock-label { font-size:11px; color:var(--text-ghost); letter-spacing:1px; }
+
+.mock-bubble { max-width:75%; padding:10px 14px; border-radius:14px; font-size:11px; line-height:1.5; margin-bottom:10px; }
+.mock-bubble.user { background:var(--sage-soft); border:1px solid rgba(148,168,126,0.2); color:var(--text-dim); align-self:flex-end; border-bottom-right-radius:4px; }
+.mock-bubble.ai { background:rgba(214,214,214,0.04); border:1px solid var(--border); color:var(--text-dim); align-self:flex-start; border-bottom-left-radius:4px; }
+
+.mock-graph { flex:1; position:relative; }
+.mock-node { position:absolute; width:10px; height:10px; border-radius:50%; background:var(--sage); opacity:0.6; }
+.mock-node.dusk { background:var(--dusk); opacity:0.5; }
+.mock-node.dim { background:var(--text-ghost); }
+.mock-edge { position:absolute; height:1px; background:rgba(148,168,126,0.2); transform-origin:left center; }
+
+.screen-dots { display:flex; gap:8px; justify-content:center; margin-top:24px; }
+.screen-dot { width:8px; height:8px; border-radius:50%; background:var(--text-ghost); cursor:pointer; transition:all 0.4s; }
+.screen-dot.active { background:var(--sage); box-shadow:0 0 8px var(--sage-glow); }
+
+/* ── CTA ── */
+.cta-section { text-align:center; }
+.cta-section h2 {
+  font-family:'Cormorant Garamond',serif; font-weight:300;
+  font-size:clamp(32px,4.5vw,56px); line-height:1.1;
+  letter-spacing:-0.5px; margin-bottom:16px;
+}
+.cta-section h2 i { color:var(--dusk); font-weight:300; }
+.cta-section > .container > p {
+  font-size:16px; font-weight:200; color:var(--text-dim);
+  margin-bottom:40px; max-width:440px; margin-left:auto; margin-right:auto; line-height:1.7;
+}
+
+.email-field {
+  display:flex; max-width:440px; margin:0 auto;
+  border-radius:100px; border:1px solid var(--border);
+  background:var(--surface); overflow:hidden;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.email-field:focus-within { border-color:var(--border-active); box-shadow:0 0 0 3px var(--sage-soft); }
+.email-field input {
+  font-family:'Outfit',sans-serif; font-size:15px; font-weight:300;
+  flex:1; padding:16px 24px; border:none; background:transparent;
+  color:var(--text); outline:none; min-width:0;
+}
+.email-field input::placeholder { color:var(--text-ghost); }
+.email-field button {
+  width:52px; height:52px; flex-shrink:0; border:none;
+  background:transparent; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s; margin-right:4px; align-self:center; border-radius:50%;
+}
+.email-field button:hover { background:var(--sage-soft); }
+.email-field button svg { width:20px; height:20px; stroke:var(--sage); transition:transform 0.3s; }
+.email-field button:hover svg { transform:translateX(2px); }
+
+.field-note { margin-top:14px; font-size:12px; color:var(--text-ghost); }
+
+.success-inline {
+  display:none; padding:16px 28px; border-radius:100px;
+  border:1px solid var(--border-active); background:var(--sage-soft);
+  color:var(--sage); font-size:14px; font-weight:300;
+  max-width:440px; margin:0 auto;
+}
+.success-inline.show { display:block; animation:rUp 0.5s forwards; }
+
+/* ── Contact ── */
+.contact-section .contact-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:80px; align-items:center;
+}
+.contact-left h2 {
+  font-family:'Cormorant Garamond',serif; font-weight:300;
+  font-size:clamp(28px,3.5vw,44px); line-height:1.15; margin-bottom:16px;
+}
+.contact-left h2 i { color:var(--dusk); font-weight:300; }
+.contact-left p { font-size:15px; font-weight:200; color:var(--text-dim); line-height:1.75; max-width:400px; }
+
+.contact-details { margin-top:32px; display:flex; flex-direction:column; gap:16px; }
+.contact-item { display:flex; align-items:center; gap:12px; font-size:14px; color:var(--text-dim); }
+.contact-icon {
+  width:36px; height:36px; border-radius:10px; background:var(--sage-soft);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.contact-icon svg { width:16px; height:16px; stroke:var(--sage); }
+
+.contact-right {
+  background:var(--bg-raised); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:40px;
+}
+.form-group { margin-bottom:20px; }
+.form-group label {
+  display:block; font-size:12px; font-weight:400;
+  letter-spacing:1px; text-transform:uppercase;
+  color:var(--text-ghost); margin-bottom:8px;
+}
+.form-input {
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:300;
+  width:100%; padding:14px 18px; border-radius:var(--radius-sm);
+  border:1px solid var(--border); background:var(--surface);
+  color:var(--text); outline:none; transition:border-color 0.3s;
+}
+.form-input:focus { border-color:var(--border-active); }
+.form-input::placeholder { color:var(--text-ghost); }
+textarea.form-input { resize:vertical; min-height:100px; line-height:1.6; }
+
+.form-submit-row {
+  display:flex; border-radius:100px; border:1px solid var(--border);
+  background:var(--surface); overflow:hidden;
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.form-submit-row:focus-within { border-color:var(--border-active); box-shadow:0 0 0 3px var(--sage-soft); }
+.form-submit-row input {
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:300;
+  flex:1; min-width:0; padding:14px 20px; border:none;
+  background:transparent; color:var(--text); outline:none;
+}
+.form-submit-row input::placeholder { color:var(--text-ghost); }
+.form-submit-row button {
+  width:48px; height:48px; flex-shrink:0; border:none;
+  background:transparent; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  margin-right:4px; align-self:center; border-radius:50%; transition:all 0.3s;
+}
+.form-submit-row button:hover { background:var(--sage-soft); }
+.form-submit-row button svg { width:18px; height:18px; stroke:var(--sage); transition:transform 0.3s; }
+.form-submit-row button:hover svg { transform:translateX(2px); }
+
+/* ── Footer ── */
+footer {
+  position:relative; z-index:1; padding:36px 40px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:12px; color:var(--text-ghost);
+}
+.footer-logo {
+  font-family: 'Bagnard Sans', serif;
+  font-size: 18px; letter-spacing: 2px; text-transform: lowercase; color:var(--text-ghost);
+}
+.footer-right { display:flex; gap:28px; }
+
+/* ── Animations ── */
+@keyframes rUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.reveal { opacity:0; transform:translateY(24px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ── Responsive ── */
+@media (max-width:900px) {
+  .hero-grid { grid-template-columns:1fr; gap:48px; text-align:center; }
+  .hero-left p { margin-left:auto; margin-right:auto; }
+  .contact-section .contact-grid { grid-template-columns:1fr; gap:40px; }
+  .container { padding:0 24px; }
+  nav { padding:0 20px; }
+  .nav-link { display:none; }
+}
+@media (max-width:500px) {
+  .iphone { width:240px; height:500px; border-radius:38px; }
+  .iphone-screen { border-radius:30px; }
+  .iphone-notch { width:100px; height:28px; border-radius:0 0 16px 16px; }
+  .section { padding:80px 0; min-height:auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<canvas id="cosmos"></canvas>
+
+<nav id="nav">
+  <div class="nav-logo">sage</div>
+  <div class="nav-right">
+    <a href="#waitlist" class="nav-link">Waitlist</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="#waitlist" class="btn-pill">Get early access</a>
+  </div>
+</nav>
+
+<!-- ━━ HERO ━━ -->
+<section class="section" id="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag"><span class="tag-dot"></span> Coming soon on iOS</div>
+        <h1>Speak your mind.<br><i>Watch it come alive.</i></h1>
+        <p>A voice-first second brain that transcribes, connects, and resurfaces your ideas — so the thoughts that matter never fade.</p>
+        <a href="#waitlist" class="btn-pill">Join the waitlist</a>
+      </div>
+      <div class="phone-wrap">
+        <div>
+          <div class="iphone">
+            <div class="iphone-notch"></div>
+            <div class="iphone-screen">
+              <div class="screen-slide active" id="screen-0">
+                <div class="mock-header" style="text-align:center;">sage</div>
+                <div class="mock-mic-area">
+                  <div class="mock-mic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+                  <div class="mock-wave"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                  <div class="mock-label">Listening...</div>
+                </div>
+              </div>
+              <div class="screen-slide" id="screen-1">
+                <div class="mock-header">Notes</div>
+                <div class="mock-bar"><div class="mock-bar-icon"></div><div class="mock-bar-text"></div></div>
+                <div class="mock-card"><div class="mock-line med"></div><div class="mock-line short"></div><div class="mock-tag"></div></div>
+                <div class="mock-card"><div class="mock-line"></div><div class="mock-line short"></div><div class="mock-tag"></div></div>
+                <div class="mock-card"><div class="mock-line med"></div><div class="mock-line short"></div></div>
+              </div>
+              <div class="screen-slide" id="screen-2">
+                <div class="mock-header">Chat</div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:flex-end;">
+                  <div class="mock-bubble user">What have I been thinking about this week?</div>
+                  <div class="mock-bubble ai">You've been exploring three themes: the product launch, your writing practice, and...</div>
+                  <div class="mock-bubble user">Tell me more about the writing</div>
+                  <div class="mock-bubble ai">Across four notes this week you mentioned wanting to build a daily habit...</div>
+                </div>
+              </div>
+              <div class="screen-slide" id="screen-3">
+                <div class="mock-header">Your brain</div>
+                <div class="mock-graph" id="mock-graph"></div>
+              </div>
+            </div>
+          </div>
+          <div class="screen-dots">
+            <div class="screen-dot active" data-screen="0"></div>
+            <div class="screen-dot" data-screen="1"></div>
+            <div class="screen-dot" data-screen="2"></div>
+            <div class="screen-dot" data-screen="3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━ CTA WAITLIST ━━ -->
+<section class="section cta-section" id="waitlist">
+  <div class="container">
+    <h2 class="reveal">Your thoughts deserve<br>a place to <i>breathe</i></h2>
+    <p class="reveal">Join the waitlist for early access. We'll let you know the moment Sage is ready.</p>
+    <div class="reveal">
+      <div class="email-field" id="form-cta">
+        <input type="email" id="email-cta" placeholder="Enter your email" aria-label="Email" />
+        <button onclick="signup('email-cta','msg-cta','form-cta')" aria-label="Submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+      <div class="success-inline" id="msg-cta">You're on the list — we'll be in touch.</div>
+      <p class="field-note">No spam, ever. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ━━ CONTACT ━━ -->
+<section class="section contact-section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <h2>Get in touch,<br><i>or get in line</i></h2>
+        <p>Have a question, want to collaborate, or just want to say hello? Drop us a note. Or sign up below to save your spot on the waitlist.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e58d8089898aa596848280cb849595">[email&#160;protected]</a></span>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <span>Boston, MA</span>
+          </div>
+        </div>
+      </div>
+      <div class="contact-right reveal">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" class="form-input" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label>Message (optional)</label>
+          <textarea class="form-input" placeholder="Tell us what's on your mind..."></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label>Email</label>
+          <div class="form-submit-row" id="form-contact">
+            <input type="email" id="email-contact" placeholder="you@email.com" />
+            <button onclick="signupContact()" aria-label="Submit">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="success-inline" id="msg-contact" style="margin-top:16px;border-radius:var(--radius-sm);">Sent! We'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">sage</div>
+  <div class="footer-right"><span>&copy; 2026</span><span>Made in Boston</span></div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Nav
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40),{passive:true});
+
+// Signup
+function signup(iid,mid,fid){
+  const inp=document.getElementById(iid),msg=document.getElementById(mid),form=document.getElementById(fid);
+  const e=inp.value.trim();
+  if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){inp.style.boxShadow='0 0 0 2px rgba(155,138,122,0.4) inset';setTimeout(()=>inp.style.boxShadow='',1800);return;}
+  form.style.display='none';msg.classList.add('show');
+}
+function signupContact(){
+  const inp=document.getElementById('email-contact'),msg=document.getElementById('msg-contact'),form=document.getElementById('form-contact');
+  const e=inp.value.trim();
+  if(!e||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){inp.style.boxShadow='0 0 0 2px rgba(155,138,122,0.4) inset';setTimeout(()=>inp.style.boxShadow='',1800);return;}
+  form.style.display='none';msg.classList.add('show');
+}
+
+// Scroll reveal — simple and reliable
+const revealEls=document.querySelectorAll('.reveal');
+function checkReveal(){
+  revealEls.forEach((el,i)=>{
+    const rect=el.getBoundingClientRect();
+    if(rect.top < window.innerHeight - 60){
+      setTimeout(()=>el.classList.add('visible'), i*80);
+    }
+  });
+}
+window.addEventListener('scroll',checkReveal,{passive:true});
+window.addEventListener('resize',checkReveal);
+checkReveal();
+
+// Phone rotation
+let cur=0;
+const slides=document.querySelectorAll('.screen-slide');
+const dots=document.querySelectorAll('.screen-dot');
+function showScreen(n){slides.forEach(s=>s.classList.remove('active'));dots.forEach(d=>d.classList.remove('active'));slides[n].classList.add('active');dots[n].classList.add('active');cur=n;}
+dots.forEach(d=>d.addEventListener('click',()=>showScreen(+d.dataset.screen)));
+setInterval(()=>showScreen((cur+1)%slides.length),3500);
+
+// Graph
+const ge=document.getElementById('mock-graph');
+if(ge){
+  const ps=[{x:30,y:20},{x:65,y:15},{x:48,y:45},{x:20,y:60},{x:75,y:55},{x:50,y:75},{x:85,y:35},{x:15,y:35},{x:60,y:85},{x:40,y:30},{x:80,y:75},{x:25,y:80}];
+  const es=[[0,2],[1,2],[2,3],[2,4],[3,5],[4,6],[5,8],[7,3],[9,1],[9,2],[4,10],[10,8],[7,5],[6,10],[0,9],[1,6],[11,5],[11,3]];
+  es.forEach(([a,b])=>{const x1=ps[a].x,y1=ps[a].y,x2=ps[b].x,y2=ps[b].y,dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy),ang=Math.atan2(dy,dx)*180/Math.PI;const l=document.createElement('div');l.className='mock-edge';l.style.cssText=`left:${x1}%;top:${y1}%;width:${len}%;transform:rotate(${ang}deg)`;ge.appendChild(l);});
+  ps.forEach((p,i)=>{const n=document.createElement('div');n.className=`mock-node ${i%4===0?'dusk':i%3===0?'dim':''}`;n.style.cssText=`left:${p.x}%;top:${p.y}%`;ge.appendChild(n);});
+}
+
+// Canvas
+const c=document.getElementById('cosmos'),ctx=c.getContext('2d');
+let W,H;const stars=[];
+function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+function init(){stars.length=0;for(let i=0;i<45;i++)stars.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.12,vy:(Math.random()-0.5)*0.08,r:Math.random()*1.5+0.4,ph:Math.random()*Math.PI*2,sp:0.004+Math.random()*0.008,k:Math.random()>0.75?'s':Math.random()>0.5?'d':'w'});}
+let t=0;
+function draw(){
+  ctx.clearRect(0,0,W,H);t++;
+  stars.forEach(s=>{s.x+=s.vx;s.y+=s.vy;if(s.x<-20)s.x=W+20;if(s.x>W+20)s.x=-20;if(s.y<-20)s.y=H+20;if(s.y>H+20)s.y=-20;});
+  for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){const dx=stars[i].x-stars[j].x,dy=stars[i].y-stars[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){ctx.beginPath();ctx.moveTo(stars[i].x,stars[i].y);ctx.lineTo(stars[j].x,stars[j].y);ctx.strokeStyle=`rgba(148,168,126,${(1-d/150)*0.05})`;ctx.lineWidth=0.4;ctx.stroke();}}
+  stars.forEach(s=>{const f=0.5+0.5*Math.sin(t*s.sp+s.ph);let col;if(s.k==='s')col=`rgba(148,168,126,${0.2+f*0.4})`;else if(s.k==='d')col=`rgba(155,138,122,${0.15+f*0.3})`;else col=`rgba(214,214,214,${0.08+f*0.15})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r*(0.85+f*0.15),0,Math.PI*2);ctx.fillStyle=col;ctx.fill();if(s.r>1.2){const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*3.5);if(s.k==='s')g.addColorStop(0,`rgba(148,168,126,${0.05*f})`);else if(s.k==='d')g.addColorStop(0,`rgba(155,138,122,${0.04*f})`);else g.addColorStop(0,`rgba(214,214,214,${0.03*f})`);g.addColorStop(1,'transparent');ctx.beginPath();ctx.arc(s.x,s.y,s.r*3.5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();}});
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize',()=>{resize();init();});
+resize();init();draw();
+
+// Smooth scroll
+document.querySelectorAl

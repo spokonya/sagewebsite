@@ -1,0 +1,40 @@
+{
+  "name": "sagewebsite",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sage info and waitlist page",
+  "scripts": {
+    "dev": "NEXT_TELEMETRY_DISABLED=1 ./node_modules/node/bin/node ./node_modules/next/dist/bin/next dev",
+    "build": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next build",
+    "start": "NEXT_TELEMETRY_DISABLED=1 ./node_modules/node/bin/node ./node_modules/next/dist/bin/next start",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.1",
+    "@swc/helpers": "^0.5.19",
+    "autoprefixer": "^10.4.27",
+    "framer-motion": "^12.38.0",
+    "next": "^15.5.7",
+    "postcss": "^8.5.8",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "resend": "^6.9.4",
+    "tailwindcss": "^3.4.19",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^15.5.7",
+    "node": "^20.20.2",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,54 @@
+---
+alwaysApply: true
+---
+
+## Context
+You are building a production landing page for Sage, a voice-first second brain iOS app. There are three reference documents in the project root that are your source of truth:
+- `sage-design-tokens.md` (repo root) — every color, font, spacing, and component decision. Never deviate from these tokens.
+- `sage-build-spec.md` (repo root) — the full build plan: stack, project structure, priorities, code patterns, and copy.
+- `sage-landing-reference.html` or `public/sage-landing-reference.html` — the working visual prototype. Open in a browser as your design target.
+
+**Read all three files before writing any code.** If a decision isn't covered in the tokens or spec, ask before improvising.
+
+## Stack (locked)
+- Next.js 14+ with App Router (TypeScript)
+- Tailwind CSS (extended with Sage design tokens)
+- Framer Motion for all animations
+- Supabase for waitlist backend
+- Resend for confirmation emails
+- Deploy target: Vercel
+
+## Code style
+- Use `'use client'` only on components that need interactivity (animations, forms, canvas). Keep layout.tsx and page.tsx as server components where possible.
+- One component per file. Name files PascalCase matching the export (e.g. `PhoneMockup.tsx`).
+- Colocate types at the top of the file unless shared, then put in `lib/types.ts`.
+- Use Tailwind utility classes. Only use inline styles for truly dynamic values (e.g. canvas calculations). No CSS modules, no styled-components.
+- Use CSS custom properties from `globals.css` for the design tokens. Mirror them in `tailwind.config.ts` `extend` so both systems work.
+- Framer Motion: use `motion.div` with `initial/animate/whileInView` patterns. Prefer `whileInView` with `viewport={{ once: true }}` for scroll reveals. Use spring physics for organic movement (`type: "spring", stiffness: 100, damping: 20`).
+
+## Design rules (non-negotiable)
+- Background is `#1E1D1A`. Never use pure black `#000`.
+- Primary text is `#D6D6D6`. Never use pure white `#FFF`.
+- Accent is `#94A87E` (olive leaf). Used for buttons, icons, active states, links.
+- Italic emphasis is `#9B8A7A` (dusk). Only used on italic words inside headlines. Never on buttons or UI elements.
+- Logo font is Bagnard Sans (loaded from CDNFonts). Headlines are Cormorant Garamond. Body is Outfit.
+- Border radius: inputs 12px, medium containers 20px, cards 28px. Buttons are 100px (pill).
+- All transitions use `cubic-bezier(0.16, 1, 0.3, 1)` easing unless spring physics are specified.
+- The iPhone mockup body must be significantly darker than the page background (#111110) so it reads as a distinct object.
+- Email input fields use the "Claude chat" pattern: rounded pill container, input on left, circular arrow-button on right.
+
+## Don'ts
+- Don't install component libraries (shadcn, Radix, Chakra). This is a single-page site with custom design. Build components from scratch.
+- Don't add a CMS, blog, or any pages beyond the single landing page.
+- Don't use `localStorage` or cookies. The page is stateless.
+- Don't add light mode. Dark only.
+- Don't change the copy. All text is finalized in `sage-build-spec.md`.
+- Don't use `position: fixed` on anything other than the nav, grain overlay, and canvas background.
+- Don't add any colors not defined in the design tokens.
+
+## Testing approach
+- Visual testing: open in browser, compare against `sage-landing-reference.html`
+- Form testing: verify Supabase insert with email validation, check success state transition
+- Responsive: test at 1440px, 900px, 500px widths
+- Animation: verify Framer Motion runs without layout shift or flash of unstyled content
+
