@@ -26,10 +26,10 @@ const secondary = "rgba(235, 235, 245, 0.6)";
 function TabBar() {
   return (
     <div
-      className="flex shrink-0 border-t border-white/[0.08] bg-black px-1"
+      className="flex h-[43px] shrink-0 border-t border-white/[0.08] bg-black px-1"
       style={{ fontFamily: SF }}
     >
-      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-1 pt-1">
+      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-[10px]">
         <svg
           className="h-[22px] w-[22px] text-white"
           viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ function TabBar() {
           Home
         </span>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-1 pt-1">
+      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-[10px]">
         <svg
           className="h-[22px] w-[22px] text-white/35"
           viewBox="0 0 24 24"
@@ -56,7 +56,7 @@ function TabBar() {
         </svg>
         <span className="text-[10px] leading-none text-white/35">Notes</span>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-1 pt-1">
+      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-[10px]">
         <svg
           className="h-[22px] w-[22px] text-white/35"
           viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ function TabBar() {
         </svg>
         <span className="text-[10px] leading-none text-white/35">Chat</span>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-1 pt-1">
+      <div className="flex flex-1 flex-col items-center justify-end gap-0.5 pb-[10px]">
         <svg
           className="h-[22px] w-[22px] text-white/35"
           viewBox="0 0 24 24"

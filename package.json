@@ -4,9 +4,9 @@
   "private": true,
   "description": "Sage info and waitlist page",
   "scripts": {
-    "dev": "NEXT_TELEMETRY_DISABLED=1 ./node_modules/node/bin/node ./node_modules/next/dist/bin/next dev",
-    "build": "NEXT_TELEMETRY_DISABLED=1 node ./node_modules/next/dist/bin/next build",
-    "start": "NEXT_TELEMETRY_DISABLED=1 ./node_modules/node/bin/node ./node_modules/next/dist/bin/next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "tsc --noEmit"
   },
   "keywords": [],

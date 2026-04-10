@@ -3,23 +3,37 @@
 @tailwind utilities;
 
 :root {
-  --bg: #1e1d1a;
-  --bg-raised: #262523;
-  --surface: rgba(214, 214, 214, 0.04);
-  --border: rgba(214, 214, 214, 0.08);
-  --border-active: rgba(148, 168, 126, 0.35);
-  --text: #d6d6d6;
-  --text-dim: rgba(214, 214, 214, 0.55);
-  --text-ghost: rgba(214, 214, 214, 0.25);
-  --sage: #94a87e;
-  --sage-soft: rgba(148, 168, 126, 0.1);
-  --sage-glow: rgba(148, 168, 126, 0.25);
-  --sage-hover: #a2b68e;
-  --dusk: #9b8a7a;
-  --dusk-soft: rgba(155, 138, 122, 0.1);
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
+  /* Layout & Background */
+  --bg: #0A0908; /* Deep midnight ink/obsidian */
+  --surface: #12100E;
+  --surface-raised: #1A1715;
+  --surface-border: rgba(234, 230, 225, 0.08);
+  
+  /* Text - Warm Parchment */
+  --text-primary: rgba(246, 242, 235, 0.95);
+  --text-secondary: rgba(246, 242, 235, 0.60);
+  --text-tertiary: rgba(246, 242, 235, 0.35);
+  
+  /* Accents */
+  --accent: #D9A05B; /* Golden Brass */
+  --accent-dim: rgba(217, 160, 91, 0.15);
+  --accent-glow: rgba(217, 160, 91, 0.35);
+  --accent-secondary: #8C9C92; /* Jade/Muted Sage */
+  
+  /* System */
+  --success: #8C9C92;
+  --error: #cf6679;
+  
+  /* Radius (Base 12px) */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+
+  /* Shadows - 2 part (tight dark + soft diffuse, hue-tinted to bg #0A0908) */
+  --shadow-1: 0 2px 8px -2px rgba(5, 4, 3, 0.6), 0 4px 16px -4px rgba(5, 4, 3, 0.4);
+  --shadow-2: 0 4px 16px -4px rgba(5, 4, 3, 0.8), 0 8px 32px -8px rgba(5, 4, 3, 0.5);
+  --shadow-3: 0 8px 32px -8px rgba(5, 4, 3, 0.9), 0 16px 48px -12px rgba(5, 4, 3, 0.6);
 }
 
 @layer base {
@@ -43,16 +57,50 @@
     margin: 0;
     min-height: 100%;
     background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-outfit), Outfit, sans-serif;
-    font-weight: 300;
+    color: var(--text-primary);
+    font-family: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+    font-weight: 400;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    background: var(--sage-soft);
-    color: var(--sage);
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair), "Playfair Display", serif;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 ease-sage active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+  }
+  
+  .btn-primary {
+    @apply rounded-full bg-accent text-bg hover:-translate-y-[2px] hover:shadow-2 hover:brightness-105;
+  }
+  
+  .btn-secondary {
+    @apply rounded-full border border-accent bg-transparent text-accent hover:-translate-y-[2px] hover:bg-accent-dim hover:shadow-1;
+  }
+  
+  .btn-tertiary {
+    @apply text-text-secondary hover:text-text-primary px-2 py-1;
+  }
+
+  .interactive-card {
+    @apply rounded-lg border border-surface-border bg-surface-raised shadow-1 transition-all duration-500 ease-sage hover:-translate-y-[2px] hover:shadow-2 hover:border-accent-dim;
+  }
+}
+
+@layer utilities {
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
   }
 }
 
@@ -60,10 +108,10 @@
 @keyframes sage-mic-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(148, 168, 126, 0.25);
+    box-shadow: 0 0 0 0 var(--accent-glow);
   }
   50% {
-    box-shadow: 0 0 0 16px rgba(148, 168, 126, 0);
+    box-shadow: 0 0 0 16px rgba(166, 181, 140, 0);
   }
 }
 

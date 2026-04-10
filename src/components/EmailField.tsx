@@ -53,8 +53,8 @@ export function EmailField({
           : { x: [0, -8, 8, -8, 8, 0] }
       }
       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className={`flex max-w-md items-center gap-0 rounded-full border border-line bg-surface py-1 pl-5 pr-1 transition-shadow duration-300 ease-sage focus-within:border-line-active focus-within:ring-[3px] focus-within:ring-sage-soft ${
-        showErrorStyle ? "shadow-[inset_0_0_0_2px_rgba(155,138,122,0.4)]" : ""
+      className={`flex w-full max-w-md items-center gap-2 rounded-full border border-transparent bg-surface-raised py-1.5 pl-6 pr-1.5 transition-shadow duration-300 ease-sage focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-glow ${
+        showErrorStyle ? "border-error focus-within:border-error focus-within:ring-error/[0.25]" : ""
       }`}
     >
       <input
@@ -72,7 +72,7 @@ export function EmailField({
         placeholder={placeholder}
         disabled={disabled}
         aria-label={ariaLabel ?? placeholder}
-        className="min-w-0 flex-1 border-0 bg-transparent py-3 pr-2 text-[15px] font-light text-dust placeholder:text-dust-ghost outline-none disabled:opacity-60"
+        className="min-w-0 flex-1 border-0 bg-transparent py-2 text-[15px] font-light text-text-primary placeholder:text-text-tertiary outline-none disabled:opacity-60"
       />
       <button
         type="button"
@@ -85,11 +85,11 @@ export function EmailField({
         }}
         disabled={disabled || loading}
         aria-label="Submit email"
-        className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full text-sage transition-all duration-300 ease-sage hover:bg-sage-soft disabled:opacity-50 [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-sage hover:[&_svg]:translate-x-0.5"
+        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent text-bg shadow-sm transition-all duration-300 ease-sage hover:brightness-110 disabled:opacity-50 focus-ring [&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-sage hover:[&_svg]:translate-x-[2px]"
       >
         {loading ? (
           <motion.svg
-            className="h-5 w-5"
+            className="h-5 w-5 text-bg"
             viewBox="0 0 24 24"
             fill="none"
             aria-hidden
@@ -117,8 +117,8 @@ export function EmailField({
         ) : (
           <svg
             viewBox="0 0 24 24"
-            width={22}
-            height={22}
+            width={20}
+            height={20}
             fill="none"
             stroke="currentColor"
             strokeWidth={2}

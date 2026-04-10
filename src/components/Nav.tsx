@@ -17,7 +17,7 @@ export function Nav() {
     <nav
       className={`fixed left-0 right-0 top-0 z-[100] flex h-[68px] items-center justify-between px-6 transition-[background-color,border-color] duration-[400ms] ease-sage nav:px-10 ${
         scrolled
-          ? "border-b border-line bg-bg/[0.92]"
+          ? "border-b border-surface-border bg-bg/[0.92]"
           : "border-b border-transparent bg-bg/[0.4]"
       }`}
       style={{
@@ -27,32 +27,32 @@ export function Nav() {
     >
       <Link
         href="#hero"
-        className="font-display text-[26px] font-normal lowercase tracking-[2px] text-dust"
+        className="font-display text-[26px] font-normal lowercase tracking-[2px] text-text-primary focus-ring rounded-sm"
       >
         sage
       </Link>
       <div className="flex items-center gap-7">
         <Link
           href="#hero"
-          className="hidden text-[13px] font-normal text-dust-dim transition-colors duration-300 hover:text-dust nav:inline"
+          className="hidden text-[13px] font-normal text-text-secondary transition-colors duration-300 hover:text-text-primary nav:inline focus-ring rounded-sm"
         >
           Home
         </Link>
         <Link
           href="#waitlist"
-          className="hidden text-[13px] font-normal text-dust-dim transition-colors duration-300 hover:text-dust nav:inline"
+          className="hidden text-[13px] font-normal text-text-secondary transition-colors duration-300 hover:text-text-primary nav:inline focus-ring rounded-sm"
         >
           Waitlist
         </Link>
         <Link
           href="#contact"
-          className="hidden text-[13px] font-normal text-dust-dim transition-colors duration-300 hover:text-dust nav:inline"
+          className="hidden text-[13px] font-normal text-text-secondary transition-colors duration-300 hover:text-text-primary nav:inline focus-ring rounded-sm"
         >
           Contact
         </Link>
         <Link
           href="#waitlist"
-          className="rounded-full bg-sage px-[22px] py-[9px] text-[13px] font-medium text-bg shadow-none transition-all duration-300 ease-sage hover:-translate-y-px hover:bg-sage-hover hover:shadow-[0_6px_24px_rgba(148,168,126,0.25)]"
+          className="btn btn-secondary px-[22px] py-[9px] text-[13px] min-w-[48px] min-h-[48px] nav:min-w-0 nav:min-h-0"
         >
           Get early access
         </Link>

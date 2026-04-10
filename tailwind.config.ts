@@ -5,22 +5,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: { DEFAULT: "#1E1D1A", raised: "#262523" },
-        surface: "rgba(214,214,214,0.04)",
-        line: "rgba(214,214,214,0.08)",
-        "line-active": "rgba(148,168,126,0.35)",
-        dust: {
-          DEFAULT: "#D6D6D6",
-          dim: "rgba(214,214,214,0.55)",
-          ghost: "rgba(214,214,214,0.25)"
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        "surface-raised": "var(--surface-raised)",
+        "surface-border": "var(--surface-border)",
+        
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          tertiary: "var(--text-tertiary)",
         },
-        sage: {
-          DEFAULT: "#94A87E",
-          soft: "rgba(148,168,126,0.10)",
-          glow: "rgba(148,168,126,0.25)",
-          hover: "#a2b68e"
+        
+        accent: {
+          DEFAULT: "var(--accent)",
+          dim: "var(--accent-dim)",
+          glow: "var(--accent-glow)",
+          secondary: "var(--accent-secondary)",
         },
-        dusk: { DEFAULT: "#9B8A7A", soft: "rgba(155,138,122,0.10)" },
+        
+        system: {
+          success: "var(--success)",
+          error: "var(--error)",
+        },
+
         phone: {
           body: "#111110",
           screen: "#131210",
@@ -30,13 +37,19 @@ const config: Config = {
       },
       fontFamily: {
         display: ["Bagnard Sans", "serif"],
-        serif: ["var(--font-cormorant)", "Cormorant Garamond", "serif"],
-        sans: ["var(--font-outfit)", "Outfit", "sans-serif"]
+        serif: ["var(--font-playfair)", "Playfair Display", "serif"],
+        sans: ["var(--font-jakarta)", "Plus Jakarta Sans", "sans-serif"]
       },
       borderRadius: {
-        sm: "12px",
-        md: "20px",
-        lg: "28px"
+        sm: "var(--radius-sm)",
+        md: "var(--radius-md)",
+        lg: "var(--radius-lg)",
+        full: "var(--radius-full)"
+      },
+      boxShadow: {
+        1: "var(--shadow-1)",
+        2: "var(--shadow-2)",
+        3: "var(--shadow-3)",
       },
       maxWidth: {
         container: "1160px"

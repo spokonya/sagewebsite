@@ -14,9 +14,9 @@ export default function Home() {
       <Nav />
       <main className="relative z-[1] pt-[68px]">
         <Hero />
-        <div className="mx-auto h-px w-full max-w-container bg-line" aria-hidden />
+        <div className="mx-auto h-px w-full max-w-container bg-surface-border my-[clamp(32px,5vh,80px)] opacity-50" aria-hidden />
         <WaitlistCTA />
-        <div className="mx-auto h-px w-full max-w-container bg-line" aria-hidden />
+        <div className="mx-auto h-px w-full max-w-container bg-surface-border my-[clamp(32px,5vh,80px)] opacity-50" aria-hidden />
         <ContactSection />
       </main>
       <Footer />
