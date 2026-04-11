@@ -73,10 +73,10 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative z-[1] flex min-h-screen max-[500px]:min-h-0 scroll-mt-[88px] items-center py-20 max-[500px]:py-[80px] min-[501px]:py-[100px]"
+      className="relative z-[1] flex scroll-mt-[88px] items-center py-[clamp(64px,10vh,120px)]"
     >
       <div className="mx-auto w-full max-w-container px-6 nav:px-10">
-        <div className="grid grid-cols-1 gap-12 nav:grid-cols-2 nav:gap-20">
+        <div className="grid grid-cols-1 items-center gap-[clamp(48px,8vw,80px)] nav:grid-cols-2">
           <motion.div
             variants={staggerParent}
             initial="hidden"
@@ -86,15 +86,15 @@ export function ContactSection() {
           >
             <motion.h2
               variants={staggerItem}
-              className="mb-4 font-serif text-[clamp(28px,3.5vw,44px)] font-light leading-snug text-dust"
+              className="mb-4 font-serif text-[clamp(28px,3.5vw,44px)] font-light leading-snug text-text-primary"
             >
               Get in touch,
               <br />
-              <em className="italic text-dusk">or get in line</em>
+              <em className="italic text-accent-secondary">or get in line</em>
             </motion.h2>
             <motion.p
               variants={staggerItem}
-              className="mb-10 text-[15px] font-light leading-[1.75] text-dust-dim"
+              className="mb-10 text-[16px] font-light leading-[1.75] text-text-secondary"
             >
               Have a question, want to collaborate, or just want to say hello?
               Drop us a note. Or sign up below to save your spot on the
@@ -106,7 +106,7 @@ export function ContactSection() {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage-soft text-sage"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent-dim text-accent"
                   aria-hidden
                 >
                   <svg
@@ -125,14 +125,14 @@ export function ContactSection() {
                 </div>
                 <Link
                   href="mailto:hello@sage.app"
-                  className="text-[15px] font-light text-dust-dim transition-colors hover:text-dust"
+                  className="text-[15px] font-light text-text-secondary transition-colors hover:text-text-primary focus-ring rounded-sm"
                 >
                   hello@sage.app
                 </Link>
               </div>
               <div className="flex items-center gap-3">
                 <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sage-soft text-sage"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent-dim text-accent"
                   aria-hidden
                 >
                   <svg
@@ -149,7 +149,7 @@ export function ContactSection() {
                     <circle cx="12" cy="10" r="3" />
                   </svg>
                 </div>
-                <span className="text-[15px] font-light text-dust-dim">
+                <span className="text-[15px] font-light text-text-secondary">
                   Boston, MA
                 </span>
               </div>
@@ -164,15 +164,16 @@ export function ContactSection() {
           >
             <motion.div
               variants={staggerItem}
-              className="rounded-lg border border-line bg-bg-raised p-8 min-[501px]:p-10"
+              className="interactive-card p-8 min-[501px]:p-10"
             >
               {success ? (
                 <motion.p
                   initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: reduce ? 0 : 0.6, ease: easeSage }}
-                  className="rounded-sm border border-line-active bg-sage-soft px-4 py-4 text-center text-sage"
+                  className="flex items-center justify-center gap-2 rounded-md border border-accent bg-accent-dim px-4 py-4 text-center text-accent"
                 >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   Sent! We&apos;ll get back to you soon.
                 </motion.p>
               ) : (
@@ -180,7 +181,7 @@ export function ContactSection() {
                   <div>
                     <label
                       htmlFor="contact-name"
-                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-dust-ghost"
+                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-text-tertiary"
                     >
                       Name
                     </label>
@@ -192,13 +193,13 @@ export function ContactSection() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Your name"
                       disabled={loading}
-                      className="w-full rounded-sm border border-line bg-surface px-[18px] py-3.5 text-sm font-light text-dust placeholder:text-dust-ghost outline-none transition-shadow duration-300 ease-sage focus:border-line-active focus:ring-[3px] focus:ring-sage-soft disabled:opacity-60"
+                      className="w-full border-b border-surface-border bg-transparent px-2 py-3 text-[15px] font-light text-text-primary placeholder:text-text-tertiary outline-none transition-colors duration-300 ease-sage focus:border-accent disabled:opacity-60"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="contact-message"
-                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-dust-ghost"
+                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-text-tertiary"
                     >
                       Message (optional)
                     </label>
@@ -209,13 +210,13 @@ export function ContactSection() {
                       placeholder="Tell us what's on your mind..."
                       disabled={loading}
                       rows={4}
-                      className="w-full resize-y rounded-sm border border-line bg-surface px-[18px] py-3.5 text-sm font-light text-dust placeholder:text-dust-ghost outline-none transition-shadow duration-300 ease-sage focus:border-line-active focus:ring-[3px] focus:ring-sage-soft disabled:opacity-60"
+                      className="w-full resize-y border-b border-surface-border bg-transparent px-2 py-3 text-[15px] font-light text-text-primary placeholder:text-text-tertiary outline-none transition-colors duration-300 ease-sage focus:border-accent disabled:opacity-60"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="email-contact"
-                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-dust-ghost"
+                      className="mb-2 block text-xs font-normal uppercase tracking-wide text-text-tertiary"
                     >
                       Email
                     </label>

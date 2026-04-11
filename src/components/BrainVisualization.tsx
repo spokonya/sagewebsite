@@ -13,10 +13,10 @@ import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 /** Marketing: faster than app default (`0.03` rad/s) for clearer motion in the mockup */
-const ROTATION_SPEED = 0.095;
+const ROTATION_SPEED = 0.1;
 
 /** Spec: `desiredWorldRadius` before density scaling */
-const BASE_MARKER_WORLD_RADIUS = 0.045;
+const BASE_MARKER_WORLD_RADIUS = 0.022;
 
 const GLB_URL = "/Rotten_Brain.glb";
 
@@ -191,9 +191,7 @@ function PulsingMarkers({
     materialsRef.current.forEach((m, i) => {
       if (!m) return;
       const phase = t * Math.PI + i * 0.65;
-      const norm = 0.5 + 0.5 * Math.sin(phase);
-      m.emissiveIntensity = 0.85 + 0.35 * Math.sin(phase);
-      m.opacity = 0.22 - 0.07 * norm;
+      m.emissiveIntensity = 1.8 + 0.8 * Math.sin(phase);
     });
   });
 
@@ -208,13 +206,9 @@ function PulsingMarkers({
             }}
             color={hexColors[i]}
             emissive={hexColors[i]}
-            emissiveIntensity={1.25}
-            metalness={0.05}
-            roughness={0.55}
-            transparent
-            opacity={0.22}
-            depthWrite={false}
-            blending={THREE.AdditiveBlending}
+            emissiveIntensity={2.0}
+            metalness={0.20}
+            roughness={0.45}
             toneMapped={false}
           />
         </mesh>
@@ -304,7 +298,9 @@ function GltfBrainScene() {
 
   useFrame((_, delta) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += delta * ROTATION_SPEED;
+      // Clamp delta to 100ms max to prevent massive rotation jumps when returning from inactive tabs
+      const safeDelta = Math.min(delta, 0.1);
+      groupRef.current.rotation.y += safeDelta * ROTATION_SPEED;
     }
   });
 

@@ -66,7 +66,7 @@ export function WaitlistCTA() {
   return (
     <section
       id="waitlist"
-      className="relative z-[1] flex min-h-screen max-[500px]:min-h-0 scroll-mt-[88px] items-center py-20 text-center max-[500px]:py-[80px] min-[501px]:py-[100px]"
+      className="relative z-[1] flex scroll-mt-[88px] items-center justify-center py-[clamp(64px,10vh,120px)] text-center"
     >
       <div className="mx-auto w-full max-w-container px-6 nav:px-10">
         <motion.div
@@ -78,16 +78,16 @@ export function WaitlistCTA() {
         >
           <motion.h2
             variants={staggerItem}
-            className="mb-4 font-serif text-[clamp(32px,4.5vw,56px)] font-light leading-tight tracking-[-0.5px] text-dust"
+            className="mb-4 font-serif text-[clamp(32px,4.5vw,56px)] font-light leading-tight tracking-[-0.5px] text-text-primary"
           >
             Your thoughts deserve
             <br />
             a place to{" "}
-            <em className="italic text-dusk">breathe</em>
+            <em className="italic text-accent-secondary">breathe</em>
           </motion.h2>
           <motion.p
             variants={staggerItem}
-            className="mb-10 max-w-lg text-base font-light leading-[1.75] text-dust-dim"
+            className="mb-10 max-w-lg text-[16px] font-light leading-[1.75] text-text-secondary"
           >
             Join the waitlist for early access. We&apos;ll let you know the
             moment Sage is ready.
@@ -101,8 +101,9 @@ export function WaitlistCTA() {
                 initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduce ? 0 : 0.6, ease: easeSage }}
-                className="rounded-full border border-line-active bg-sage-soft px-8 py-4 text-sage"
+                className="flex items-center gap-3 rounded-full border border-accent bg-accent-dim px-8 py-4 text-accent"
               >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 You&apos;re on the list — we&apos;ll be in touch.
               </motion.div>
             ) : (
@@ -124,7 +125,7 @@ export function WaitlistCTA() {
                 )}
               </>
             )}
-            <p className="text-xs font-light text-dust-ghost">
+            <p className="mt-2 text-[13px] font-light text-text-tertiary">
               No spam, ever. Unsubscribe anytime.
             </p>
           </motion.div>
